@@ -1,15 +1,15 @@
 <?php
-ini_set('memory_limit', '512M'); // Aumento la memoria máxima permitida para el script
+ini_set(option: 'memory_limit', value: '512M'); // Aumento la memoria máxima permitida para el script
 function leer($archivo, $delimit = ";") 
 {
     $data = [];
-    if (($handle = fopen($archivo, "r")) !== FALSE)
+    if (($handle = fopen(filename: $archivo, mode: "r")) !== FALSE)
     {
-        while (($row = fgetcsv($handle, 1000, $delimit)) !== FALSE) 
+        while (($row = fgetcsv(stream: $handle, length: 1000, separator: $delimit)) !== FALSE) 
         {
             $data[] = $row;
         }
-        fclose($handle);
+        fclose(stream: $handle);
     }
     return $data;
 }
@@ -20,12 +20,12 @@ function corregirNulos($data, $columnasNoNulas)
     {
         foreach ($row as $index => &$valor) 
         {
-            $valor = trim($valor);
+            $valor = trim(string: $valor);
             if ($valor === "") 
             {
                 $valor = NULL;
             }
-            if (is_null($valor) && in_array($index, $columnasNoNulas) && $valor !== "") 
+            if (is_null(value: $valor) && in_array(needle: $index, haystack: $columnasNoNulas) && $valor !== "") 
             {
                 $valor = "X"; // Los datos nulos simplemente les puse una X
             }
@@ -40,11 +40,11 @@ function corregirRango($data, $columnasRango, $rango)
     {
         foreach ($row as $index => &$valor) 
         {
-            if (in_array($index, $columnasRango)) 
+            if (in_array(needle: $index, haystack: $columnasRango)) 
             {
-                if (!in_array($valor, range($rango[0], $rango[1]))) 
+                if (!in_array(needle: $valor, haystack: range(start: $rango[0], end: $rango[1]))) 
                 {
-                    if (strval($valor) !== "k" && strval($valor) !== "K") 
+                    if (strval(value: $valor) !== "k" && strval(value: $valor) !== "K") 
                     {
                         $valor = "X";
                     }
@@ -56,21 +56,21 @@ function corregirRango($data, $columnasRango, $rango)
 }
 
 // Leer
-$archivo1Data = leer("Archivo1.csv");
-$archivo2Data = leer("archivo2.csv");
+$archivo1Data = leer(archivo: "Archivo1.csv");
+$archivo2Data = leer(archivo: "archivo2.csv");
 
 // Para definir las columnas que no pueden ser nulas, quiero definir un array con los indices de las columnas que no pueden ser nulas
 $noNulos1 = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 13, 14, 15, 16, 17, 18, 20, 21, 22];
 $noNulos2 = [0, 1];
 
 // Hago la corrección manual con las funciones definidas previamente
-$archivo1DataCorregido = corregirNulos($archivo1Data, $noNulos1);
-$archivo2DataCorregido = corregirNulos($archivo2Data, $noNulos2);
+$archivo1DataCorregido = corregirNulos(data: $archivo1Data, columnasNoNulas: $noNulos1);
+$archivo2DataCorregido = corregirNulos(data: $archivo2Data, columnasNoNulas: $noNulos2);
 
-$archivo1DataCorregido = corregirRango($archivo1DataCorregido, [19], [1, 7]); //Notas A1
+$archivo1DataCorregido = corregirRango(data: $archivo1DataCorregido, columnasRango: [19], rango: [1, 7]); //Notas A1
 
-$archivo1DataCorregido = corregirRango($archivo1DataCorregido, [5], [0, 9]); //DV A1
-$archivo2DataCorregido = corregirRango($archivo2DataCorregido, [2], [0, 9]); //DV A2
+$archivo1DataCorregido = corregirRango(data: $archivo1DataCorregido, columnasRango: [5], rango: [0, 9]); //DV A1
+$archivo2DataCorregido = corregirRango(data: $archivo2DataCorregido, columnasRango: [2], rango: [0, 9]); //DV A2
 
 
 
@@ -80,7 +80,7 @@ $runList = [];
 foreach ($archivo1DataCorregido as $row) 
 {
     $run = $row[4];
-    if (!in_array($run, $runList)) 
+    if (!in_array(needle: $run, haystack: $runList)) 
     {
         $persona = 
         [
@@ -102,7 +102,7 @@ foreach ($archivo1DataCorregido as $row)
 foreach ($archivo2DataCorregido as $row) 
 {
     $run = $row[0];
-    if (!in_array($run, $runList)) 
+    if (!in_array(needle: $run, haystack: $runList)) 
     {
         $persona = 
         [
@@ -127,7 +127,7 @@ $runList2 = [];
 foreach ($archivo1DataCorregido as $row) 
 {
     $run = $row[4];
-    if (!in_array($run, $runList2)) 
+    if (!in_array(needle: $run, haystack: $runList2)) 
     {
         $estudiante = 
         [
@@ -150,7 +150,7 @@ $runList3 = [];
 foreach ($archivo2DataCorregido as $row) 
 {
     $run = $row[0];
-    if (!in_array($run, $runList3) && !is_null($row[13])) 
+    if (!in_array(needle: $run, haystack: $runList3) && !is_null(value: $row[13])) 
     {
         $profesor = 
         [
@@ -172,7 +172,7 @@ $runList4 = [];
 foreach ($archivo2DataCorregido as $row) 
 {
     $run = $row[0];
-    if (!in_array($run, $runList4) && !is_null($row[14])) 
+    if (!in_array(needle: $run, haystack: $runList4) && !is_null(value: $row[14])) 
     {
         $admin = 
         [
@@ -191,10 +191,10 @@ $sigla_seccionList5 = [];
 foreach ($archivo1DataCorregido as $row)
 {
     $sigla_seccion = [$row[14], $row[19]];
-    if (!in_array($sigla_seccion[0], array_column($sigla_seccionList5, 0))) {
+    if (!in_array(needle: $sigla_seccion[0], haystack: array_column(array: $sigla_seccionList5, column_key: 0))) {
         $sigla_seccionList5[] = $sigla_seccion;
     }
-    if (!in_array($sigla_seccion, $sigla_seccionList5))
+    if (!in_array(needle: $sigla_seccion, haystack: $sigla_seccionList5))
     {
         foreach ($sigla_seccionList5 as &$elemento) 
         {
@@ -209,7 +209,7 @@ foreach ($archivo1DataCorregido as $row)
 foreach($archivo1DataCorregido as $row)
 {
     $sigla_seccion = [$row[14], $row[19]];
-    if (in_array($sigla_seccion, $sigla_seccionList5))
+    if (in_array(needle: $sigla_seccion, haystack: $sigla_seccionList5))
     {
         $curso = 
         [
@@ -238,18 +238,18 @@ foreach ($archivo1DataCorregido as $row)
     $notasData[] = $nota;
 }
 
-$hand = fopen('php://stdin', 'r');
+$hand = fopen(filename: 'php://stdin', mode: 'r');
 echo "Búsqueda':\nCarga academica acumulada [Ingrese 1]\nLista de cursos [Ingrese 2]\n y presione Enter: ";
-$input = trim(fgets($hand));
+$input = trim(string: fgets(stream: $hand));
 
 if ($input == 1) 
 {
     echo "Ingrese RUN del estudiante que busca, sin puntos ni guión y sin DV: ";
-    $run = trim(fgets($hand));
-    if (!preg_match('/^\d{7,8}$/', $run)) // Para especificar que debe ser un RUN entre 7 y 8 digitos
+    $run = trim(string: fgets(stream: $hand));
+    if (!preg_match(pattern: '/^\d{7,8}$/', subject: $run)) // Para especificar que debe ser un RUN entre 7 y 8 digitos
     {
         echo "RUN inválido. \n";
-        fclose($hand);
+        fclose(stream: $hand);
         exit;
     }
     $found = false; // Variable para verificar si se encontró
@@ -275,10 +275,10 @@ if ($input == 1)
 else if ($input == 2) 
 {
     echo "Ingrese el periodo del curso a buscar: ";
-    $periodo = trim(fgets($hand));
+    $periodo = trim(string: fgets(stream: $hand));
     
     echo "Ingrese sigla del curso: ";
-    $sigla = trim(fgets($hand));
+    $sigla = trim(string: fgets(stream: $hand));
 
     $found = false;
 
@@ -300,5 +300,5 @@ else if ($input == 2)
         echo "No se encontró ningún curso con el periodo y sigla proporcionados.\n";
     }
 }
-fclose($hand);
+fclose(stream: $hand);
 ?>
