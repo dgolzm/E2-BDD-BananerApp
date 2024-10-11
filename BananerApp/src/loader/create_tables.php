@@ -1,5 +1,5 @@
 <?php
-include('../config/conexion.php');
+include('../config/connection.php');
 require('table_parameters.php');
 
 // Crear las tablas
