@@ -1,17 +1,17 @@
 <?php
 
 $path_tablas = array(
-    'Prerquisitos' => '../files/Prerequisitos.csv',
-    'Notas' => '../files/Notas.csv',
-    'Planes' => '../files/Planes.csv',
-    'Asignaturas' => '../files/Asignaturas.csv',
-    'Alumnos' => '../files/Alumnos.csv',
-    'Planeacion' => '../files/Planeacion.csv',
-    "Docentes_Planificados" => '../files/Docentes_Planificados.csv'
+    'Prerequisitos' => 'files/Prerequisitos.csv',
+    'Notas' => 'files/Notas.csv',
+    'Planes' => 'files/Planes.csv',
+    'Asignaturas' => 'files/Asignaturas.csv',
+    'Alumnos' => 'files/Alumnos.csv',
+    'Planeacion' => 'files/Planeacion.csv',
+    "Docentes_Planificados" => 'files/Docentes_Planificados.csv'
 );
 
 $tablas_iniciales = array(
-    'Prerquisitos' => "PLAN CHAR(3),
+    'Prerequisitos' => "PLAN CHAR(3),
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT,
