@@ -1,111 +1,44 @@
 <?php
+include('../config/conexion.php');
+require('table_parameters.php');
 
-$path_tablas = array(
-    'Prerquisitos' => '../files/Prerequisitos.csv',
-    'Notas' => '../files/Notas.csv',
-    'Planes' => '../files/Planes.csv',
-    'Asignaturas' => '../files/Asignaturas.csv',
-    'Alumnos' => '../files/Alumnos.csv',
-    'Planeacion' => '../files/Planeacion.csv',
-    "Docentes_Planificados" => '../files/Docentes_Planificados.csv'
-);
+// Crear las tablas
+foreach($tablas_iniciales as $tabla => $atributos) {
+    try {
+        echo "Creando tabla $tabla...\n";
+        $db->beginTransaction();
+        $createTableQuery = "CREATE TABLE IF NOT EXISTS $tabla ($atributos);";
+        $db->exec(statement: $createTableQuery);
+        $db->commit();
+    } catch (Exception $e) {
+        $db->rollBack();
+        echo "Error al crear la tabla $tabla: " . $e->getMessage();
+    }
+}
 
-$tablas_iniciales = array(
-    'Prerquisitos' => "PLAN CHAR(3),
-        ASIGNATURA_ID TEXT,
-        ASIGNATURA TEXT,
-        NIVEL INT,
-        PREREQUISITOS TEXT",
+// Cargar los datos desde los archivos CSV
+foreach($path_tablas as $tabla => $filePath) {
+    try {
+        echo "Cargando datos en la tabla $tabla desde $filePath...\n";
+        $db->beginTransaction();
+        
+        // Leer el archivo CSV
+        if (($handle = fopen(filename: $filePath, mode: "r")) !== FALSE) {
+            $header = fgetcsv(stream: $handle, length: 1000, separator: ",");
+            while (($data = fgetcsv(stream: $handle, length: 1000, separator: ",")) !== FALSE) {
+                $values = array_map(callback: function($value) use ($db): mixed {
+                    return $db->quote($value);
+                }, array: $data);
+                $insertQuery = "INSERT INTO $tabla (" . implode(separator: ", ", array: $header) . ") VALUES (" . implode(separator: ", ", array: $values) . ");";
+                $db->exec(statement: $insertQuery);
+            }
+            fclose(stream: $handle);
+        }
 
-    'Usuarios' => "CODIGO_PLAN CHAR(3),
-        PLAN TEXT,
-        COHORTE TEXT,
-        SEDE TEXT,
-        RUN VARCHAR(10),
-        DV CHAR(1),
-        NOMBRES TEXT,
-        APELLIDO_PATERNO TEXT,
-        APELLIDO_MATERNO TEXT,
-        NUMERO_DE_ALUMNO INT,
-        PERIODO_ASIGNATURA TEXT,
-        CODIGO_ASIGNATURA TEXT,
-        ASIGNATURA TEXT,
-        CONVOCATORIA TEXT,
-        CALIFICACION TEXT,
-        NOTA FLOAT",
-
-    "Planes" => "CODIGO_PLAN CHAR(3),
-        FACULTAD TEXT,
-        CARRERA TEXT,
-        PLAN TEXT,
-        JORNADA TEXT,
-        SEDE TEXT,
-        GRADO TEXT,
-        MODALIDAD TEXT,
-        INICIO_VIENCIA DATE",
-
-    "Asignaturas" => "PLAN CHAR(3),
-        ASIGANTURA_ID TEXT,
-        ASIGNATURA TEXT,
-        NIVEL INT",
-
-    "Alumnos" => "CODIGO_PLAN CHAR(3),
-        CARRERA TEXT,
-        COHORTE TEXT,
-        NUMERO_DE_ALUMNO INT,
-        BLOQUEO CHAR(1),
-        CAUSAL_BLQUEO TEXT,
-        PRIMARY KEY RUN VARCHAR(10),
-        DV CHAR(1),
-        NOMBRES TEXT,
-        PRIMER_APELLIDO TEXT,
-        SEGUNDO_APELLIDO TEXT,
-        LOGRO TEXT,
-        FECHA_LOGRO VARCHAR(7),
-        ULTIMA_CARGA VARCHAR(7) NULL",
-
-    "Planeacion" => "PERIODO VARCHAR(7)
-        SEDE TEXT,
-        FACULTAD TEXT,
-        CODIGO_DEPARTAMENTO CHAR(5)
-        DEPARTAMENTO TEXT,
-        ID_ASIGNATURA TEXT,
-        ASIGNATURA TEXT,
-        SECCION INT,
-        DURACION CHAR(1),
-        JORNADA TEXT,
-        CUPOS INT,
-        INSCRITOS INT,
-        DIA TEXT,
-        HORA_INICIO TIME,
-        HORA_FINAL TIME,
-        FECHA_INICIO DATE,
-        FECHA_FIN DATE,
-        LUGAR TEXT,
-        EDIFICIO TEXT,
-        PROFESDOR_PRINCIPAL TEXT,
-        RUN VARCHAR(10),
-        NOMBRE_DOCENTE TEXT,
-        APELLIDO_DOCENTE TEXT,
-        2DO_APELLIDO_DOCENTE TEXT,
-        JERARQUIZACION TEXT",
-
-    "Docentes_Planificados" => "RUN VARCHAR(10),
-        NOMBRE TEXT,
-        APELLIDO_PATERNO TEXT,
-        TELEFONO INT,
-        EMAIL_PERSONAL TEXT,
-        EMAIL_INSTITUCIONAL TEXT,
-        DEDICACION INT,
-        CONTRATO TEXT,
-        DIURNO BOOLEAN,
-        VESPERTINO BOOLEAN,
-        SEDE TEXT,
-        CARRERA TEXT,
-        GRADO_ACADEMICO TEXT,
-        JERARQUIA TEXT,
-        CARGO TEXT,
-        ESTAMENTO TEXT",
-);
-
+        $db->commit();
+    } catch (Exception $e) {
+        $db->rollBack();
+        echo "Error al cargar datos en la tabla $tabla: " . $e->getMessage();
+    }
+}
 ?>
