@@ -1,7 +1,7 @@
 <?php
 
 $path_tablas = array(
-    'Prerequisitos' => 'files/Prerequisitos.csv',
+    'Prerrequisitos' => 'files/Prerrequisitos.csv',
     'Notas' => 'files/Notas.csv',
     'Planes' => 'files/Planes.csv',
     'Asignaturas' => 'files/Asignaturas.csv',
@@ -11,7 +11,7 @@ $path_tablas = array(
 );
 
 $tablas_iniciales = array(
-    'Prerequisitos' => "PLAN CHAR(3),
+    'Prerrequisitos' => "PLAN CHAR(3),
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT,

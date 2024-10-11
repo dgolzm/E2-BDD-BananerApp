@@ -1,5 +1,5 @@
 <?php
-    include('../config/connection.php');
+    include('config/connection.php');
     require("table_parameters.php");
     require("utils.php");
 
