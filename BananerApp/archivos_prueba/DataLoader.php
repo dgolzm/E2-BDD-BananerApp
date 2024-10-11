@@ -11,7 +11,7 @@ class DataLoader {
         $this->db = $database->connect();
     }
 
-    public function loadCSV($filePath): void {
+    public function loadCSV($filePath, $tableName): void {
         if (!file_exists(filename: $filePath) || !is_readable(filename: $filePath)) {
             echo "El archivo no se puede leer o no existe.\n";
             return;
@@ -27,27 +27,22 @@ class DataLoader {
 
         while (($row = fgetcsv(stream: $handle)) !== false) {
             $data = array_combine(keys: $header, values: $row);  // Combinar encabezado con los valores
-            $this->insertData($data);
+            $this->insertData($data, $tableName);
         }
 
-        fclose(stream: $handle);
+        fclose($handle);
     }
 
-    private function insertData($data): void {
-        // Validación básica
-        if (filter_var(value: $data['email'], filter: FILTER_VALIDATE_EMAIL) === false) {
-            $this->logError($data, 'Correo inválido');
-            return;
-        }
-
+    private function insertData($data, $tableName): void {
         try {
-            $query = "INSERT INTO users (id, name, email, created_at) VALUES (:id, :name, :email, :created_at)";
+            $columns = implode(separator: ", ", array: array_keys($data));
+            $placeholders = ":" . implode(separator: ", :", array: array_keys($data));
+            $query = "INSERT INTO $tableName ($columns) VALUES ($placeholders)";
             $stmt = $this->db->prepare(query: $query);
 
-            $stmt->bindParam(param: ':id', var: $data['id'], type: PDO::PARAM_INT);
-            $stmt->bindParam(param: ':name', var: $data['name'], type: PDO::PARAM_STR);
-            $stmt->bindParam(param: ':email', var: $data['email'], type: PDO::PARAM_STR);
-            $stmt->bindParam(param: ':created_at', var: $data['created_at'], type: PDO::PARAM_STR);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(param: ":$key", value: $value);
+            }
 
             $stmt->execute();
         } catch (PDOException $e) {
