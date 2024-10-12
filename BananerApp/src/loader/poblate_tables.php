@@ -12,25 +12,25 @@
                 $header = fgetcsv($file); // Nos saltamos la primera linea
                 while (($data = fgetcsv($file, 5000, ";")) !== false){
                     // Verificamos las restricciones antes de insertar
-                    if ($tabla == "Prerequisitos") {
+                    if ($tabla == "prerequisitos") {
                         Corregir_tabla_prerequisitos($data);
                     }
-                    else if ($tabla == "Notas") {
+                    else if ($tabla == "notas") {
                         Corregir_tabla_Notas($data);
                     }
-                    else if ($tabla == "Planes") {
+                    else if ($tabla == "planes") {
                         Corregir_tabla_Planes($data);
                     }
-                    else if ($tabla == "Asignaturas") {
+                    else if ($tabla == "asignaturas") {
                         Corregir_tabla_Asignaturas($data);
                     }
-                    else if ($tabla == "Estudiantes") {
+                    else if ($tabla == "estudiantes") {
                         Corregir_tabla_Estudiantes($data);
                     }
                     else if ($tabla == "Planeacion") {
-                        Corregir_tabla_Planeacion($data);
+                        $valid = Corregir_tabla_Planeacion($data);
                     }
-                    else if ($tabla == "Docentes_Planificados") {
+                    else if ($tabla == "docentes_planificados") {
                         Corregir_tabla_Docentes_Planificados($data);
                     }
                     //Restricciones globales
@@ -234,6 +234,9 @@
         if (!preg_match('/^\d{2}\/\d{2}\/\d{2}$/', $data[16])) {
             $data[16] = "X";
         }
+        if (in_array($data[16], array("31-12-24", "30-12-24"))) {
+            $data[16] = "01-09-24";
+        }
         // La Vigésimaprimera columna (RUN) debe tener el formato (7 o 8 numeros)
         if (!preg_match('/^\d{7,8}$/', $data[20])) {
             $data[20] = "X";
@@ -287,6 +290,7 @@
         $modificadas = 'AEIOUaeiou';
         return strtr($cadena, $originales, $modificadas);
     }
+
     function producto_cruzado($array1, $array2, $jerarquia) {
         foreach ($array1 as $elemento1) {
             foreach ($array2 as $elemento2) {

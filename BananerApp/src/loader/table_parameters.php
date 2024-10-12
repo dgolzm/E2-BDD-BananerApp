@@ -11,14 +11,14 @@ $path_tablas = array(
 );
 
 $tablas_iniciales = array(
-    'Prerequisitos' => "PLAN CHAR(3),
+    'prerequisitos' => "PLAN CHAR(3),
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT,
         UNO TEXT,
         DOS TEXT",
 
-    'Notas' => "CODIGO_PLAN TEXT,
+    'notas' => "CODIGO_PLAN TEXT,
         PLAN TEXT,
         COHORTE TEXT,
         SEDE TEXT,
@@ -35,7 +35,7 @@ $tablas_iniciales = array(
         CALIFICACION TEXT,
         NOTA TEXT",
 
-    "Planes" => "CODIGO_PLAN CHAR(3),
+    'planes' => "CODIGO_PLAN CHAR(3),
         FACULTAD TEXT,
         CARRERA TEXT,
         PLAN TEXT,
@@ -45,18 +45,18 @@ $tablas_iniciales = array(
         MODALIDAD TEXT,
         INICIO_VIGENCIA TEXT",
 
-    "Asignaturas" => "PLAN CHAR(3),
+    'asignaturas' => "PLAN CHAR(3),
         ASIGANTURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT",
 
-    "Estudiantes" => "CODIGO_PLAN CHAR(3),
+    'estudiantes' => "CODIGO_PLAN CHAR(3),
         CARRERA TEXT,
         COHORTE TEXT,
         NUMERO_DE_ALUMNO INT,
         BLOQUEO CHAR(1),
         CAUSAL_BLQUEO TEXT,
-        PRIMARY KEY RUN VARCHAR(10),
+        RUN VARCHAR(10),
         DV CHAR(1),
         NOMBRES TEXT,
         PRIMER_APELLIDO TEXT,
@@ -65,10 +65,10 @@ $tablas_iniciales = array(
         FECHA_LOGRO VARCHAR(7),
         ULTIMA_CARGA VARCHAR(7) NULL",
 
-    "Planeacion" => "PERIODO VARCHAR(7)
+    'planeacion' => "PERIODO VARCHAR(7),
         SEDE TEXT,
         FACULTAD TEXT,
-        CODIGO_DEPARTAMENTO CHAR(5)
+        CODIGO_DEPARTAMENTO CHAR(5),
         DEPARTAMENTO TEXT,
         ID_ASIGNATURA TEXT,
         ASIGNATURA TEXT,
@@ -80,18 +80,18 @@ $tablas_iniciales = array(
         DIA TEXT,
         HORA_INICIO TIME,
         HORA_FINAL TIME,
-        FECHA_INICIO DATE,
-        FECHA_FIN DATE,
+        FECHA_INICIO TEXT,
+        FECHA_FIN TEXT,
         LUGAR TEXT,
         EDIFICIO TEXT,
-        PROFESDOR_PRINCIPAL TEXT,
+        PROFESOR_PRINCIPAL TEXT,
         RUN VARCHAR(10),
         NOMBRE_DOCENTE TEXT,
         APELLIDO_DOCENTE TEXT,
-        2DO_APELLIDO_DOCENTE TEXT,
+        SEGUNDO_APELLIDO_DOCENTE TEXT,
         JERARQUIZACION TEXT",
 
-    "Docentes_Planificados" => "RUN VARCHAR(10),
+    'docentes_planificados' => "RUN VARCHAR(10),
         NOMBRE TEXT,
         APELLIDO_PATERNO TEXT,
         TELEFONO INT,
@@ -106,7 +106,7 @@ $tablas_iniciales = array(
         GRADO_ACADEMICO TEXT,
         JERARQUIA TEXT,
         CARGO TEXT,
-        ESTAMENTO TEXT",
+        ESTAMENTO TEXT"
 );
 
 ?>
