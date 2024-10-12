@@ -1,23 +1,24 @@
 <?php
 
 $path_tablas = array(
-    'Prerrequisitos' => 'files/Prerrequisitos.csv',
+    'Prerequisitos' => 'files/Prerrequisitos.csv',
     'Notas' => 'files/Notas.csv',
     'Planes' => 'files/Planes.csv',
     'Asignaturas' => 'files/Asignaturas.csv',
-    'Alumnos' => 'files/Alumnos.csv',
+    'Estudiantes' => 'files/Estudiantes.csv',
     'Planeacion' => 'files/Planeacion.csv',
     "Docentes_Planificados" => 'files/Docentes_Planificados.csv'
 );
 
 $tablas_iniciales = array(
-    'Prerrequisitos' => "PLAN CHAR(3),
+    'Prerequisitos' => "PLAN CHAR(3),
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT,
-        PREREQUISITOS TEXT",
+        UNO TEXT,
+        DOS TEXT",
 
-    'Usuarios' => "CODIGO_PLAN CHAR(3),
+    'Notas' => "CODIGO_PLAN TEXT,
         PLAN TEXT,
         COHORTE TEXT,
         SEDE TEXT,
@@ -32,7 +33,7 @@ $tablas_iniciales = array(
         ASIGNATURA TEXT,
         CONVOCATORIA TEXT,
         CALIFICACION TEXT,
-        NOTA FLOAT",
+        NOTA TEXT",
 
     "Planes" => "CODIGO_PLAN CHAR(3),
         FACULTAD TEXT,
@@ -42,14 +43,14 @@ $tablas_iniciales = array(
         SEDE TEXT,
         GRADO TEXT,
         MODALIDAD TEXT,
-        INICIO_VIENCIA DATE",
+        INICIO_VIGENCIA TEXT",
 
     "Asignaturas" => "PLAN CHAR(3),
         ASIGANTURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT",
 
-    "Alumnos" => "CODIGO_PLAN CHAR(3),
+    "Estudiantes" => "CODIGO_PLAN CHAR(3),
         CARRERA TEXT,
         COHORTE TEXT,
         NUMERO_DE_ALUMNO INT,
@@ -98,8 +99,8 @@ $tablas_iniciales = array(
         EMAIL_INSTITUCIONAL TEXT,
         DEDICACION INT,
         CONTRATO TEXT,
-        DIURNO BOOLEAN,
-        VESPERTINO BOOLEAN,
+        DIURNO TEXT,
+        VESPERTINO TEXT,
         SEDE TEXT,
         CARRERA TEXT,
         GRADO_ACADEMICO TEXT,
