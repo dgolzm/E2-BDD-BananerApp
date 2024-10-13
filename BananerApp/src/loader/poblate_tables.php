@@ -4,6 +4,9 @@
     require("utils.php");
 
     try {
+        // Cambiar el datestyle para la sesión actual
+        $db->exec("SET datestyle = 'DMY';");
+
         echo "INSERTANDO DATOS\n";
         foreach($path_tablas as $tabla => $path) {
             $file = fopen($path, "r");
@@ -12,25 +15,25 @@
                 $header = fgetcsv($file); // Nos saltamos la primera linea
                 while (($data = fgetcsv($file, 5000, ";")) !== false){
                     // Verificamos las restricciones antes de insertar
-                    if ($tabla == "prerequisitos") {
+                    if ($tabla == "Prerequisitos") {
                         Corregir_tabla_prerequisitos($data);
                     }
-                    else if ($tabla == "notas") {
+                    else if ($tabla == "Notas") {
                         Corregir_tabla_Notas($data);
                     }
-                    else if ($tabla == "planes") {
+                    else if ($tabla == "Planes") {
                         Corregir_tabla_Planes($data);
                     }
-                    else if ($tabla == "asignaturas") {
+                    else if ($tabla == "Asignaturas") {
                         Corregir_tabla_Asignaturas($data);
                     }
-                    else if ($tabla == "estudiantes") {
+                    else if ($tabla == "Estudiantes") {
                         Corregir_tabla_Estudiantes($data);
                     }
                     else if ($tabla == "Planeacion") {
-                        $valid = Corregir_tabla_Planeacion($data);
+                        Corregir_tabla_Planeacion($data);
                     }
-                    else if ($tabla == "docentes_planificados") {
+                    else if ($tabla == "Docentes_Planificados") {
                         Corregir_tabla_Docentes_Planificados($data);
                     }
                     //Restricciones globales
@@ -228,14 +231,11 @@
             $data[14] = "X";
         }
         // La decimosexta y decimoséptima columna (Fecha Inicio y Final) debe tener el formato (2 Numeros)"/"(2 numeros)"/"(2 numeros)
-        if (!preg_match('/^\d{2}\/\d{2}\/\d{2}$/', $data[15])) {
+        if (!preg_match('/^\d{2}\-\d{2}\-\d{4}$/', $data[15])) {
             $data[15] = "X";
         }
-        if (!preg_match('/^\d{2}\/\d{2}\/\d{2}$/', $data[16])) {
+        if (!preg_match('/^\d{2}\-\d{2}\-\d{4}$/', $data[16])) {
             $data[16] = "X";
-        }
-        if (in_array($data[16], array("31-12-24", "30-12-24"))) {
-            $data[16] = "01-09-24";
         }
         // La Vigésimaprimera columna (RUN) debe tener el formato (7 o 8 numeros)
         if (!preg_match('/^\d{7,8}$/', $data[20])) {
