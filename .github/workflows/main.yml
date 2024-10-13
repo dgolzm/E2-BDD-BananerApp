@@ -43,4 +43,4 @@ jobs:
         php-version: '7.4' # Puedes cambiar la versión de PHP según tus necesidades
 
     - name: Run loader.php
-      run: php loader.php
+      run: php BananerApp\src\loader\loader.php
