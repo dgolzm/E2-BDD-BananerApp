@@ -1,12 +1,12 @@
 <?php
 $path_tablas = array(
-    //'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
-    //'Notas' => 'files/Notas_unicas.csv',
-    //'Planes' => 'files/Planes_unicos.csv',
+    'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
+    'Notas' => 'files/Notas_unicas.csv',
+    'Planes' => 'files/Planes_unicos.csv',
     'Asignaturas' => 'files/Asignaturas_unicas.csv',
-    //'Estudiantes' => 'files/Estudiantes_unicos.csv',
+    'Estudiantes' => 'files/Estudiantes_unicos.csv',
     'Planeacion' => 'files/Planeacion_unicos.csv',
-    //"Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv'
+    "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv'
 );
 
 $tablas_iniciales = array(
