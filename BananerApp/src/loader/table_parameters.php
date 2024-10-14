@@ -1,22 +1,22 @@
 <?php
-
 $path_tablas = array(
-    'Prerequisitos' => 'files/Prerrequisitos.csv',
-    'Notas' => 'files/Notas.csv',
-    'Planes' => 'files/Planes.csv',
-    'Asignaturas' => 'files/Asignaturas.csv',
-    'Estudiantes' => 'files/Estudiantes.csv',
-    'Planeacion' => 'files/Planeacion.csv',
-    "Docentes_Planificados" => 'files/Docentes_Planificados.csv'
+    //'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
+    //'Notas' => 'files/Notas_unicas.csv',
+    //'Planes' => 'files/Planes_unicos.csv',
+    'Asignaturas' => 'files/Asignaturas_unicas.csv',
+    //'Estudiantes' => 'files/Estudiantes_unicos.csv',
+    'Planeacion' => 'files/Planeacion_unicos.csv',
+    //"Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv'
 );
 
 $tablas_iniciales = array(
-    'prerequisitos' => "PLAN CHAR(3),
+    'prerequisitos' => "PLAN TEXT,
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
         NIVEL INT,
         UNO TEXT,
-        DOS TEXT",
+        DOS TEXT,
+        PRIMARY KEY (ASIGNATURA_ID)",
 
     'notas' => "CODIGO_PLAN TEXT,
         PLAN TEXT,
@@ -33,9 +33,10 @@ $tablas_iniciales = array(
         ASIGNATURA TEXT,
         CONVOCATORIA TEXT,
         CALIFICACION TEXT,
-        NOTA TEXT",
+        NOTA TEXT,
+        PRIMARY KEY (RUN, PERIODO_ASIGNATURA, CODIGO_ASIGNATURA)",
 
-    'planes' => "CODIGO_PLAN CHAR(3),
+    'planes' => "CODIGO_PLAN TEXT,
         FACULTAD TEXT,
         CARRERA TEXT,
         PLAN TEXT,
@@ -43,14 +44,16 @@ $tablas_iniciales = array(
         SEDE TEXT,
         GRADO TEXT,
         MODALIDAD TEXT,
-        INICIO_VIGENCIA TEXT",
+        INICIO_VIGENCIA TEXT,
+        PRIMARY KEY (CODIGO_PLAN)",
 
-    'asignaturas' => "PLAN CHAR(3),
-        ASIGANTURA_ID TEXT,
+    'asignaturas' => "PLAN TEXT,
+        ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
-        NIVEL INT",
+        NIVEL INT,
+        PRIMARY KEY (ASIGNATURA_ID)",
 
-    'estudiantes' => "CODIGO_PLAN CHAR(3),
+    'estudiantes' => "CODIGO_PLAN TEXT,
         CARRERA TEXT,
         COHORTE TEXT,
         NUMERO_DE_ALUMNO INT,
@@ -58,12 +61,14 @@ $tablas_iniciales = array(
         CAUSAL_BLQUEO TEXT,
         RUN VARCHAR(10),
         DV CHAR(1),
-        NOMBRES TEXT,
+        PRIMER_NOMBRE TEXT,
+        SEGUNDO_NOMBRE TEXT,
         PRIMER_APELLIDO TEXT,
         SEGUNDO_APELLIDO TEXT,
         LOGRO TEXT,
         FECHA_LOGRO VARCHAR(7),
-        ULTIMA_CARGA VARCHAR(7) NULL",
+        ULTIMA_CARGA VARCHAR(7) NULL,
+        PRIMARY KEY (NUMERO_DE_ALUMNO)",
 
     'planeacion' => "PERIODO VARCHAR(7),
         SEDE TEXT,
@@ -89,12 +94,14 @@ $tablas_iniciales = array(
         NOMBRE_DOCENTE TEXT,
         APELLIDO_DOCENTE TEXT,
         SEGUNDO_APELLIDO_DOCENTE TEXT,
-        JERARQUIZACION TEXT",
+        JERARQUIZACION TEXT,
+        PRIMARY KEY (ID_ASIGNATURA, HORA_INICIO, LUGAR)
+        FOREIGN KEY (ID_ASIGNATURA) REFERENCES asignaturas (ASIGNATURA_ID)",
 
-    'docentes_planificados' => "RUN VARCHAR(10),
+    'docentes_planificados' => "RUN TEXT,
         NOMBRE TEXT,
         APELLIDO_PATERNO TEXT,
-        TELEFONO INT,
+        TELEFONO TEXT,
         EMAIL_PERSONAL TEXT,
         EMAIL_INSTITUCIONAL TEXT,
         DEDICACION INT,
@@ -106,7 +113,8 @@ $tablas_iniciales = array(
         GRADO_ACADEMICO TEXT,
         JERARQUIA TEXT,
         CARGO TEXT,
-        ESTAMENTO TEXT"
+        ESTAMENTO TEXT,
+        PRIMARY KEY (RUN)"
 );
 
 ?>

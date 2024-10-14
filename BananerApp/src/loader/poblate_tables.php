@@ -15,8 +15,9 @@
                 $header = fgetcsv($file); // Nos saltamos la primera linea
                 while (($data = fgetcsv($file, 5000, ";")) !== false){
                     // Verificamos las restricciones antes de insertar
+                    $Llaves_Prerequisitos = array();
                     if ($tabla == "Prerequisitos") {
-                        Corregir_tabla_prerequisitos($data);
+                        Corregir_tabla_prerequisitos($data, $Llaves_Prerequisitos);
                     }
                     else if ($tabla == "Notas") {
                         Corregir_tabla_Notas($data);
@@ -53,7 +54,7 @@
         echo "Error al cargar datos: " . $e->getMessage();
     }
 
-    function Corregir_tabla_prerequisitos($data){
+    function Corregir_tabla_prerequisitos($data, $llaves){
         // La primera columna (Plan) debe tener el formato (2 Letras)(1 numero)
         if (!preg_match('/^[A-Za-z]{2}\d$/', $data[0])) {
             $data[0] = "X";
@@ -65,6 +66,13 @@
         // La cuarta columna (Nivel) debe tener el formato (1 numero)
         if (!preg_match('/^\d$/', $data[3])) {
             $data[3] = "X";
+        }
+        //Eliminamos duplicados
+        if (in_array($data[1], $llaves)) {
+            $data[1] = null;
+        }
+        else {
+            array_push($llaves, $data[1]);
         }
     }
 
