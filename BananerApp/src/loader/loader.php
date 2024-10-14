@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
     function remove_duplicates($input_file, $output_file, $key_columns) {
         $rows = array();
@@ -34,13 +35,13 @@
     }
     // Usar la función para eliminar duplicados
     echo "Eliminando duplicados...\n";
-    //remove_duplicates('files/Prerrequisitos.csv', 'files/Prerrequisitos_unicos.csv', [1]);
-    //remove_duplicates('files/Notas.csv', 'files/Notas_unicas.csv', [4, 10, 11]);
-    //remove_duplicates('files/Planes.csv', 'files/Planes_unicos.csv', [0]);
+    remove_duplicates('files/Prerrequisitos.csv', 'files/Prerrequisitos_unicos.csv', [1]);
+    remove_duplicates('files/Notas.csv', 'files/Notas_unicas.csv', [4, 10, 11]);
+    remove_duplicates('files/Planes.csv', 'files/Planes_unicos.csv', [0]);
     remove_duplicates('files/Asignaturas.csv', 'files/Asignaturas_unicas.csv', [0]);
     remove_duplicates('files/Planeacion.csv', 'files/Planeacion_unicos.csv', [5, 13, 17]);
-    //remove_duplicates('files/Estudiantes.csv', 'files/Estudiantes_unicos.csv', [3]);
-    //remove_duplicates('files/Docentes_Planificados.csv', 'files/Docentes_Planificados_unicos.csv', [0]);
+    remove_duplicates('files/Estudiantes.csv', 'files/Estudiantes_unicos.csv', [3]);
+    remove_duplicates('files/Docentes_Planificados.csv', 'files/Docentes_Planificados_unicos.csv', [0]);
 
 
     require_once('config/connection.php');
