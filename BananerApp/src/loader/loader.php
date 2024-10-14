@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
     function remove_duplicates($input_file, $output_file, $key_columns) {
         $rows = array();
