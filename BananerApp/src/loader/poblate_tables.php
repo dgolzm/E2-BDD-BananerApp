@@ -2,6 +2,7 @@
     include('config/connection.php');
     require("table_parameters.php");
     require("utils.php");
+    $tabla_actual = "";
 
     try {
         // Cambiar el datestyle para la sesión actual
@@ -15,27 +16,30 @@
                 $header = fgetcsv($file); // Nos saltamos la primera linea
                 while (($data = fgetcsv($file, 5000, ";")) !== false){
                     // Verificamos las restricciones antes de insertar
-                    $Llaves_Prerequisitos = array();
+                    if ($tabla != $tabla_actual) {
+                        echo ("TABLA ACTUAL: ".$tabla . "\n");
+                        $tabla_actual = $tabla;
+                    }
+                    if ($tabla == "Asignaturas") {
+                        Corregir_tabla_Asignaturas($data);
+                    }
                     if ($tabla == "Prerequisitos") {
                         Corregir_tabla_prerequisitos($data);
                     }
-                    else if ($tabla == "Notas") {
-                        Corregir_tabla_Notas($data);
-                    }
-                    else if ($tabla == "Planes") {
+                    if ($tabla == "Planes") {
                         Corregir_tabla_Planes($data);
                     }
-                    else if ($tabla == "Asignaturas") {
-                        Corregir_tabla_Asignaturas($data);
-                    }
-                    else if ($tabla == "Estudiantes") {
+                    if ($tabla == "Estudiantes") {
                         Corregir_tabla_Estudiantes($data);
                     }
-                    else if ($tabla == "Planeacion") {
-                        Corregir_tabla_Planeacion($data);
+                    if ($tabla == "Notas") {
+                        Corregir_tabla_Notas($data);
                     }
-                    else if ($tabla == "Docentes_Planificados") {
+                    if ($tabla == "Docentes_Planificados") {
                         Corregir_tabla_Docentes_Planificados($data);
+                    }
+                    if ($tabla == "Planeacion") {
+                        Corregir_tabla_Planeacion($data);
                     }
                     //Restricciones globales
                     for ($i = 0; $i < count($data); $i++) {
