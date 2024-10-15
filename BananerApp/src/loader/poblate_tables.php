@@ -17,7 +17,7 @@
                     // Verificamos las restricciones antes de insertar
                     $Llaves_Prerequisitos = array();
                     if ($tabla == "Prerequisitos") {
-                        Corregir_tabla_prerequisitos($data, $Llaves_Prerequisitos);
+                        Corregir_tabla_prerequisitos($data);
                     }
                     else if ($tabla == "Notas") {
                         Corregir_tabla_Notas($data);
@@ -54,7 +54,7 @@
         echo "Error al cargar datos: " . $e->getMessage();
     }
 
-    function Corregir_tabla_prerequisitos($data, $llaves){
+    function Corregir_tabla_prerequisitos($data){
         // La primera columna (Plan) debe tener el formato (2 Letras)(1 numero)
         if (!preg_match('/^[A-Za-z]{2}\d$/', $data[0])) {
             $data[0] = "X";
@@ -66,13 +66,6 @@
         // La cuarta columna (Nivel) debe tener el formato (1 numero)
         if (!preg_match('/^\d$/', $data[3])) {
             $data[3] = "X";
-        }
-        //Eliminamos duplicados
-        if (in_array($data[1], $llaves)) {
-            $data[1] = null;
-        }
-        else {
-            array_push($llaves, $data[1]);
         }
     }
 
@@ -252,6 +245,9 @@
     }
 
     function Corregir_tabla_Docentes_Planificados($data){
+        if (strlen($data[6]) > 8 || strlen($data[6]) < 7) {
+            echo("RUN: $data[6]\n");
+        }
         // La primera columna (RUN) debe tener el formato (7 o 8 numeros)
         if (!preg_match('/^\d{7,8}$/', $data[0])) {
             $data[0] = "X";

@@ -14,12 +14,8 @@
                 $key = implode("-", $key_values); // Crear una clave única combinando los valores de las columnas clave
     
                 if (!in_array($key, $unique_keys)) {
-                    echo "Agregando $key\n";
                     $unique_keys[] = $key;
                     $rows[] = $data;
-                }
-                else{
-                    echo "Duplicado $key\n";
                 }
             }
             fclose($handle);
