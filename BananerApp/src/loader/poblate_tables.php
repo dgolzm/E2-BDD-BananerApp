@@ -2,6 +2,7 @@
     include('config/connection.php');
     require("table_parameters.php");
     require("utils.php");
+    $tabla_actual = "";
 
     try {
         // Cambiar el datestyle para la sesión actual
@@ -15,27 +16,30 @@
                 $header = fgetcsv($file); // Nos saltamos la primera linea
                 while (($data = fgetcsv($file, 5000, ";")) !== false){
                     // Verificamos las restricciones antes de insertar
-                    $Llaves_Prerequisitos = array();
-                    if ($tabla == "Prerequisitos") {
-                        Corregir_tabla_prerequisitos($data, $Llaves_Prerequisitos);
+                    if ($tabla != $tabla_actual) {
+                        echo ("TABLA ACTUAL: ".$tabla . "\n");
+                        $tabla_actual = $tabla;
                     }
-                    else if ($tabla == "Notas") {
-                        Corregir_tabla_Notas($data);
-                    }
-                    else if ($tabla == "Planes") {
-                        Corregir_tabla_Planes($data);
-                    }
-                    else if ($tabla == "Asignaturas") {
+                    if ($tabla == "Asignaturas") {
                         Corregir_tabla_Asignaturas($data);
                     }
-                    else if ($tabla == "Estudiantes") {
+                    if ($tabla == "Prerequisitos") {
+                        Corregir_tabla_prerequisitos($data);
+                    }
+                    if ($tabla == "Planes") {
+                        Corregir_tabla_Planes($data);
+                    }
+                    if ($tabla == "Estudiantes") {
                         Corregir_tabla_Estudiantes($data);
                     }
-                    else if ($tabla == "Planeacion") {
-                        Corregir_tabla_Planeacion($data);
+                    if ($tabla == "Notas") {
+                        Corregir_tabla_Notas($data);
                     }
-                    else if ($tabla == "Docentes_Planificados") {
+                    if ($tabla == "Docentes_Planificados") {
                         Corregir_tabla_Docentes_Planificados($data);
+                    }
+                    if ($tabla == "Planeacion") {
+                        Corregir_tabla_Planeacion($data);
                     }
                     //Restricciones globales
                     for ($i = 0; $i < count($data); $i++) {
@@ -50,11 +54,12 @@
                 echo "Error al abrir el archivo $path\n";
             }
         }
+        //crear_y_poblar_tabla_personas($db);
     } catch (Exception $e) {
         echo "Error al cargar datos: " . $e->getMessage();
     }
 
-    function Corregir_tabla_prerequisitos($data, $llaves){
+    function Corregir_tabla_prerequisitos($data){
         // La primera columna (Plan) debe tener el formato (2 Letras)(1 numero)
         if (!preg_match('/^[A-Za-z]{2}\d$/', $data[0])) {
             $data[0] = "X";
@@ -66,13 +71,6 @@
         // La cuarta columna (Nivel) debe tener el formato (1 numero)
         if (!preg_match('/^\d$/', $data[3])) {
             $data[3] = "X";
-        }
-        //Eliminamos duplicados
-        if (in_array($data[1], $llaves)) {
-            $data[1] = null;
-        }
-        else {
-            array_push($llaves, $data[1]);
         }
     }
 
@@ -310,4 +308,66 @@
         }
         return False;
     }
+
+    function crear_y_poblar_tabla_personas($db) {
+        // Crear la tabla personas si no existe
+        $db->exec("CREATE TABLE IF NOT EXISTS personas (
+            RUN VARCHAR(10) PRIMARY KEY,
+            DV CHAR(1),
+            NOMBRES TEXT,
+            APELLIDO_PATERNO TEXT,
+            APELLIDO_MATERNO TEXT,
+            NOMBRE_COMPLETO TEXT,
+            TELEFONO TEXT,
+            MAIL_PERSONAL TEXT,
+            MAIL_INSTITUCIONAL TEXT
+        );");
+    
+        // Insertar o actualizar datos desde estudiantes
+        $result = $db->query("SELECT * FROM estudiantes");
+        foreach ($result as $row) {
+            $run = $row['RUN'];
+            $dv = $row['DV'];
+            $nombres = $row['PRIMER_NOMBRE'] . ' ' . $row['SEGUNDO_NOMBRE'];
+            $apellido_paterno = $row['PRIMER_APELLIDO'];
+            $apellido_materno = $row['SEGUNDO_APELLIDO'];
+            $nombre_completo = $nombres . ' ' . $apellido_paterno . ' ' . $apellido_materno;
+    
+            $stmt = $db->prepare("INSERT INTO personas (RUN, DV, NOMBRES, APELLIDO_PATERNO, APELLIDO_MATERNO, NOMBRE_COMPLETO)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT (RUN) DO UPDATE SET
+                    DV = COALESCE(EXCLUDED.DV, personas.DV),
+                    NOMBRES = COALESCE(EXCLUDED.NOMBRES, personas.NOMBRES),
+                    APELLIDO_PATERNO = COALESCE(EXCLUDED.APELLIDO_PATERNO, personas.APELLIDO_PATERNO),
+                    APELLIDO_MATERNO = COALESCE(EXCLUDED.APELLIDO_MATERNO, personas.APELLIDO_MATERNO),
+                    NOMBRE_COMPLETO = COALESCE(EXCLUDED.NOMBRE_COMPLETO, personas.NOMBRE_COMPLETO);");
+            $stmt->execute([$run, $dv, $nombres, $apellido_paterno, $apellido_materno, $nombre_completo]);
+        }
+    
+        // Insertar o actualizar datos desde docentes_planificados
+        $result = $db->query("SELECT * FROM docentes_planificados");
+        foreach ($result as $row) {
+            $run = $row['RUN'];
+            $nombres = $row['NOMBRE'];
+            $apellido_paterno = $row['APELLIDO_PATERNO'];
+            $apellido_materno = $row['APELLIDO_MATERNO'];
+            $telefono = $row['TELEFONO'];
+            $mail_personal = $row['EMAIL_PERSONAL'];
+            $mail_institucional = $row['EMAIL_INSTITUCIONAL'];
+            $nombre_completo = $nombres . ' ' . $apellido_paterno . ' ' . $apellido_materno;
+    
+            $stmt = $db->prepare("INSERT INTO personas (RUN, NOMBRES, APELLIDO_PATERNO, APELLIDO_MATERNO, NOMBRE_COMPLETO, TELEFONO, MAIL_PERSONAL, MAIL_INSTITUCIONAL)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT (RUN) DO UPDATE SET
+                    NOMBRES = COALESCE(EXCLUDED.NOMBRES, personas.NOMBRES),
+                    APELLIDO_PATERNO = COALESCE(EXCLUDED.APELLIDO_PATERNO, personas.APELLIDO_PATERNO),
+                    APELLIDO_MATERNO = COALESCE(EXCLUDED.APELLIDO_MATERNO, personas.APELLIDO_MATERNO),
+                    NOMBRE_COMPLETO = COALESCE(EXCLUDED.NOMBRE_COMPLETO, personas.NOMBRE_COMPLETO),
+                    TELEFONO = COALESCE(EXCLUDED.TELEFONO, personas.TELEFONO),
+                    MAIL_PERSONAL = COALESCE(EXCLUDED.MAIL_PERSONAL, personas.MAIL_PERSONAL),
+                    MAIL_INSTITUCIONAL = COALESCE(EXCLUDED.MAIL_INSTITUCIONAL, personas.MAIL_INSTITUCIONAL);");
+            $stmt->execute([$run, $nombres, $apellido_paterno, $apellido_materno, $nombre_completo, $telefono, $mail_personal, $mail_institucional]);
+        }
+    }
+    ?>
 ?>
