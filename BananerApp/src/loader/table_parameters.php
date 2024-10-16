@@ -4,7 +4,7 @@ $path_tablas = array(
     'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
     'Planes' => 'files/Planes_unicos.csv',
     'Estudiantes' => 'files/Estudiantes_unicos.csv',
-    'Notas' => 'files/Notas_unicas.csv',
+    //'Notas' => 'files/Notas.csv',
     "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv',
     'Planeacion' => 'files/Planeacion_unicos.csv'
 );
@@ -70,8 +70,8 @@ $tablas_iniciales = array(
         CONVOCATORIA TEXT,
         CALIFICACION TEXT,
         NOTA TEXT,
-        PRIMARY KEY (RUN, PERIODO_ASIGNATURA),
-        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN),",
+        PRIMARY KEY (NUMERO_DE_ALUMNO, PERIODO_ASIGNATURA, CODIGO_ASIGNATURA),
+        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN)",
         //FOREIGN KEY (NUMERO_DE_ALUMNO) REFERENCES estudiantes (NUMERO_DE_ALUMNO)",
 
     'docentes_planificados' => "RUN TEXT,
@@ -119,6 +119,5 @@ $tablas_iniciales = array(
         JERARQUIZACION TEXT,
         PRIMARY KEY (ID_ASIGNATURA, HORA_INICIO),
         FOREIGN KEY (ID_ASIGNATURA) REFERENCES asignaturas (ASIGNATURA_ID)",
-
 );
 ?>
