@@ -36,13 +36,12 @@ include('templates/header.html');
 
 
   <p class="prompt">Porcentaje de aprobacion por curso</p>
-  <form class="form" action="consultas/consulta_canciones_por_artista.php" method="post">
-    <input class="form-input" type="text" required placeholder="Ingresa un curso" name="artista"> 
+  <form class="form" action="consultas/consulta_periodo_cpa.php" method="post">
+    <input class="form-input" type="text" required placeholder="Ingresa un curso" name="periodo"> 
     <br>
     <input class="form-button" type="submit" value="Buscar">
   </form>
-  <br>
-  <br>
+  
 
 
   
@@ -58,7 +57,7 @@ include('templates/header.html');
   <br>
 
   <p class="prompt">Porcentaje de aprobacion historico por profesor:</p>
-  <form class="form" action="consultas/consulta_canciones_por_artista.php" method="post">
+  <form class="form" action="consultas/consulta_aprobacion_historica.php.php" method="post">
     <input class="form-input" type="text" required placeholder="Ingresa un curso" name="artista"> 
     <br>
     <input class="form-button" type="submit" value="Buscar">
@@ -68,7 +67,7 @@ include('templates/header.html');
 
 
   <p class="prompt">Proyeccion de cursos 2025 para estudiante:</p>
-  <form class="form" action="consultas/consulta_canciones_por_artista.php" method="post">
+  <form class="form" action="consultas/consulta_propuesta2025.php" method="post">
     <input class="form-input" type="text" required placeholder="Ingresa numero de estudiante" name="artista"> 
     <br>
     <input class="form-button" type="submit" value="Buscar">

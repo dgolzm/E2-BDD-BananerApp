@@ -4,7 +4,8 @@ $path_tablas = array(
     'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
     'Planes' => 'files/Planes_unicos.csv',
     'Estudiantes' => 'files/Estudiantes_unicos.csv',
-    //'Notas' => 'files/Notas_unicas.csv',
+    // 'Notas' => 'files/Notas_unicas.csv',
+    'nota_prueba' => 'files/nota_prueba.csv',
     "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv',
     'Planeacion' => 'files/Planeacion_unicos.csv',
     'usuarios' => 'files/Usuarios_prueba.csv',
@@ -55,7 +56,7 @@ $tablas_iniciales = array(
         PRIMARY KEY (NUMERO_DE_ALUMNO),
         FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN)",
         
-    'notas' => "CODIGO_PLAN TEXT,
+    'nota_prueba' => "CODIGO_PLAN TEXT,
         PLAN TEXT,
         COHORTE TEXT,
         SEDE TEXT,
