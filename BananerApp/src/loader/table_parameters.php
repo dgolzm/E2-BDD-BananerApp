@@ -4,12 +4,23 @@ $path_tablas = array(
     'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
     'Planes' => 'files/Planes_unicos.csv',
     'Estudiantes' => 'files/Estudiantes_unicos.csv',
-    //'Notas' => 'files/Notas.csv',
+    'Notas' => 'files/Notas.csv',
     "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv',
     'Planeacion' => 'files/Planeacion_unicos.csv'
 );
 
 $tablas_iniciales = array(
+    "personas" => "RUN VARCHAR(10),
+        DV CHAR(1),
+        NOMBRES TEXT,
+        APELLIDO_PATERNO TEXT,
+        APELLIDO_MATERNO TEXT,
+        NOMBRE_COMPLETO TEXT,
+        TELEFONO TEXT,
+        CORREO_PERSONAL TEXT,
+        CORREO_INSTITUCIONAL TEXT,
+        PRIMARY KEY (RUN)",
+
     'asignaturas' => "PLAN TEXT,
         ASIGNATURA_ID TEXT,
         ASIGNATURA TEXT,
@@ -52,7 +63,8 @@ $tablas_iniciales = array(
         FECHA_LOGRO VARCHAR(7),
         ULTIMA_CARGA VARCHAR(7) NULL,
         PRIMARY KEY (NUMERO_DE_ALUMNO),
-        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN)",
+        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN),
+        FOREIGN KEY (RUN) REFERENCES personas (RUN)",
         
     'notas' => "CODIGO_PLAN TEXT,
         PLAN TEXT,
@@ -71,8 +83,8 @@ $tablas_iniciales = array(
         CALIFICACION TEXT,
         NOTA TEXT,
         PRIMARY KEY (NUMERO_DE_ALUMNO, PERIODO_ASIGNATURA, CODIGO_ASIGNATURA),
-        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN)",
-        //FOREIGN KEY (NUMERO_DE_ALUMNO) REFERENCES estudiantes (NUMERO_DE_ALUMNO)",
+        FOREIGN KEY (CODIGO_PLAN) REFERENCES planes (CODIGO_PLAN),
+        FOREIGN KEY (NUMERO_DE_ALUMNO) REFERENCES estudiantes (NUMERO_DE_ALUMNO)",
 
     'docentes_planificados' => "RUN TEXT,
         NOMBRE TEXT,
@@ -90,7 +102,8 @@ $tablas_iniciales = array(
         JERARQUIA TEXT,
         CARGO TEXT,
         ESTAMENTO TEXT,
-        PRIMARY KEY (RUN)",
+        PRIMARY KEY (RUN),
+        FOREIGN KEY (RUN) REFERENCES personas (RUN)",
 
     'planeacion' => "PERIODO VARCHAR(7),
         SEDE TEXT,

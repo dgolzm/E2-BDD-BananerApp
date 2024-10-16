@@ -20,6 +20,7 @@
             ($handle);
         }
     
+
         if (($handle = fopen($output_file, "w")) !== false) {
             fputcsv($handle, $header, ";"); // Escribir la cabecera
             foreach ($rows as $row) {
@@ -41,8 +42,6 @@
     echo "Eliminando duplicados...\n";
     remove_duplicates('files/Prerrequisitos.csv', 'files/Prerrequisitos_unicos.csv', [0]);
     echo "Prerrequisitos unicos LISTO\n";
-    //remove_duplicates('files/Notas.csv', 'files/Notas_unicas.csv', [9, 10, 11]);
-    //file_put_contents('Notas_unicas.csv', array_unique(file('Notas.csv')));
     echo "Notas unicos LISTO\n";
     remove_duplicates('files/Planes.csv', 'files/Planes_unicos.csv', [0]);
     echo "Planes unicos LISTO\n";

@@ -4,6 +4,9 @@
     require("utils.php");
     $tabla_actual = "";
 
+    // Llamar a la función para poblar la tabla Personas
+    //poblar_tabla_personas($db);
+
     try {
         // Cambiar el datestyle para la sesión actual
         $db->exec("SET datestyle = 'DMY';");
@@ -309,65 +312,25 @@
         return False;
     }
 
-    function crear_y_poblar_tabla_personas($db) {
-        // Crear la tabla personas si no existe
-        $db->exec("CREATE TABLE IF NOT EXISTS personas (
-            RUN VARCHAR(10) PRIMARY KEY,
-            DV CHAR(1),
-            NOMBRES TEXT,
-            APELLIDO_PATERNO TEXT,
-            APELLIDO_MATERNO TEXT,
-            NOMBRE_COMPLETO TEXT,
-            TELEFONO TEXT,
-            MAIL_PERSONAL TEXT,
-            MAIL_INSTITUCIONAL TEXT
-        );");
-    
-        // Insertar o actualizar datos desde estudiantes
-        $result = $db->query("SELECT * FROM estudiantes");
-        foreach ($result as $row) {
-            $run = $row['RUN'];
-            $dv = $row['DV'];
-            $nombres = $row['PRIMER_NOMBRE'] . ' ' . $row['SEGUNDO_NOMBRE'];
-            $apellido_paterno = $row['PRIMER_APELLIDO'];
-            $apellido_materno = $row['SEGUNDO_APELLIDO'];
-            $nombre_completo = $nombres . ' ' . $apellido_paterno . ' ' . $apellido_materno;
-    
-            $stmt = $db->prepare("INSERT INTO personas (RUN, DV, NOMBRES, APELLIDO_PATERNO, APELLIDO_MATERNO, NOMBRE_COMPLETO)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ON CONFLICT (RUN) DO UPDATE SET
-                    DV = COALESCE(EXCLUDED.DV, personas.DV),
-                    NOMBRES = COALESCE(EXCLUDED.NOMBRES, personas.NOMBRES),
-                    APELLIDO_PATERNO = COALESCE(EXCLUDED.APELLIDO_PATERNO, personas.APELLIDO_PATERNO),
-                    APELLIDO_MATERNO = COALESCE(EXCLUDED.APELLIDO_MATERNO, personas.APELLIDO_MATERNO),
-                    NOMBRE_COMPLETO = COALESCE(EXCLUDED.NOMBRE_COMPLETO, personas.NOMBRE_COMPLETO);");
-            $stmt->execute([$run, $dv, $nombres, $apellido_paterno, $apellido_materno, $nombre_completo]);
-        }
-    
-        // Insertar o actualizar datos desde docentes_planificados
-        $result = $db->query("SELECT * FROM docentes_planificados");
-        foreach ($result as $row) {
-            $run = $row['RUN'];
-            $nombres = $row['NOMBRE'];
-            $apellido_paterno = $row['APELLIDO_PATERNO'];
-            $apellido_materno = $row['APELLIDO_MATERNO'];
-            $telefono = $row['TELEFONO'];
-            $mail_personal = $row['EMAIL_PERSONAL'];
-            $mail_institucional = $row['EMAIL_INSTITUCIONAL'];
-            $nombre_completo = $nombres . ' ' . $apellido_paterno . ' ' . $apellido_materno;
-    
-            $stmt = $db->prepare("INSERT INTO personas (RUN, NOMBRES, APELLIDO_PATERNO, APELLIDO_MATERNO, NOMBRE_COMPLETO, TELEFONO, MAIL_PERSONAL, MAIL_INSTITUCIONAL)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT (RUN) DO UPDATE SET
-                    NOMBRES = COALESCE(EXCLUDED.NOMBRES, personas.NOMBRES),
-                    APELLIDO_PATERNO = COALESCE(EXCLUDED.APELLIDO_PATERNO, personas.APELLIDO_PATERNO),
-                    APELLIDO_MATERNO = COALESCE(EXCLUDED.APELLIDO_MATERNO, personas.APELLIDO_MATERNO),
-                    NOMBRE_COMPLETO = COALESCE(EXCLUDED.NOMBRE_COMPLETO, personas.NOMBRE_COMPLETO),
-                    TELEFONO = COALESCE(EXCLUDED.TELEFONO, personas.TELEFONO),
-                    MAIL_PERSONAL = COALESCE(EXCLUDED.MAIL_PERSONAL, personas.MAIL_PERSONAL),
-                    MAIL_INSTITUCIONAL = COALESCE(EXCLUDED.MAIL_INSTITUCIONAL, personas.MAIL_INSTITUCIONAL);");
-            $stmt->execute([$run, $nombres, $apellido_paterno, $apellido_materno, $nombre_completo, $telefono, $mail_personal, $mail_institucional]);
+    function poblar_tabla_personas($db) {
+        try {
+            echo "Poblando tabla Personas...\n";
+
+            // Poblar desde la tabla Docentes
+            $query = "INSERT INTO personas (RUN, DV, Nombres, Apellido_Paterno, Apellido_Materno, Nombre_Completo, Telefono, Correo_Personal, Correo_Institucional)
+                      SELECT RUN, '', NOMBRE, APELLIDO_PATERNO, '', NOMBRE || ' ' || APELLIDO_PATERNO, TELEFONO, EMAIL_PERSONAL, EMAIL_INSTITUCIONAL
+                      FROM docentes_planificados";
+            $db->exec($query);
+
+            // Poblar desde la tabla Estudiantes
+            $query = "INSERT INTO personas (RUN, DV, Nombres, Apellido_Paterno, Apellido_Materno, Nombre_Completo, Telefono, Correo_Personal, Correo_Institucional)
+                      SELECT RUN, DV, PRIMER_NOMBRE || ' ' || SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO, PRIMER_NOMBRE || ' ' || SEGUNDO_NOMBRE || ' ' || PRIMER_APELLIDO || ' ' || SEGUNDO_APELLIDO, '', '', ''
+                      FROM estudiantes";
+            $db->exec($query);
+
+            echo "Tabla Personas poblada con éxito.\n";
+        } catch (Exception $e) {
+            echo "Error al poblar la tabla Personas: " . $e->getMessage();
         }
     }
-    ?>
 ?>
