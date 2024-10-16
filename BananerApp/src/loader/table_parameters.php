@@ -4,9 +4,10 @@ $path_tablas = array(
     'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
     'Planes' => 'files/Planes_unicos.csv',
     'Estudiantes' => 'files/Estudiantes_unicos.csv',
-    //'Notas' => 'files/Notas.csv',
+    //'Notas' => 'files/Notas_unicas.csv',
     "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv',
-    'Planeacion' => 'files/Planeacion_unicos.csv'
+    'Planeacion' => 'files/Planeacion_unicos.csv',
+    'usuarios' => 'files/Usuarios_prueba.csv',
 );
 
 $tablas_iniciales = array(
@@ -119,5 +120,11 @@ $tablas_iniciales = array(
         JERARQUIZACION TEXT,
         PRIMARY KEY (ID_ASIGNATURA, HORA_INICIO),
         FOREIGN KEY (ID_ASIGNATURA) REFERENCES asignaturas (ASIGNATURA_ID)",
+
+
+    'usuarios' => 
+    'email VARCHAR(255) UNIQUE NOT NULL, 
+    password VARCHAR(255) NOT NULL, 
+    role VARCHAR(50) NOT NULL',
 );
 ?>

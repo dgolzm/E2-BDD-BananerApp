@@ -26,8 +26,14 @@ include('templates/header.html');
     <br>
     <input class="form-button" type="submit" value="Buscar">
   </form>
+  
   <br>
-  <br>
+  
+
+
+
+
+
 
   <p class="prompt">Porcentaje de aprobacion por curso</p>
   <form class="form" action="consultas/consulta_canciones_por_artista.php" method="post">
@@ -37,6 +43,10 @@ include('templates/header.html');
   </form>
   <br>
   <br>
+
+
+  
+
 
   <p class="prompt">Porcentaje de aprobacion por periodo:</p>
   <form class="form" action="consultas/consulta_canciones_por_artista.php" method="post">
