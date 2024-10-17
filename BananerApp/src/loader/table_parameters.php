@@ -4,11 +4,7 @@ $path_tablas = array(
     'Prerequisitos' => 'files/Prerrequisitos_unicos.csv',
     'Planes' => 'files/Planes_unicos.csv',
     'Estudiantes' => 'files/Estudiantes_unicos.csv',
-<<<<<<< HEAD
     'Notas' => 'files/Notas.csv',
-=======
-    //'Notas' => 'files/Notas_unicas.csv',
->>>>>>> dca49f80015d1cad72d276c927a50997c663a589
     "Docentes_Planificados" => 'files/Docentes_Planificados_unicos.csv',
     'Planeacion' => 'files/Planeacion_unicos.csv',
     'usuarios' => 'files/Usuarios_prueba.csv',
